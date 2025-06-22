@@ -1,48 +1,104 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TrustBroker - Sign Up</title>
+  <meta charset="UTF-8">
+  <title>TrustBroker.org - Sign Up</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+    }
+    .btn-blue {
+      background-color: #2563eb;
+      color: white;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      text-align: center;
+      width: 100%;
+    }
+    .translate-container {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 font-sans">
-  <header class="bg-blue-900 text-white p-4 flex items-center gap-3">
-    <img src="https://img.icons8.com/external-flat-juicy-fish/64/null/external-forex-finance-flat-flat-juicy-fish.png" class="h-10" alt="TrustBroker Logo"/>
-    <h1 class="text-xl font-bold">TrustBroker</h1>
-  </header>
-  <section class="bg-blue-100 text-center py-6 px-4">
-    <h2 class="text-2xl font-semibold text-blue-900">Create Your Trading & Investment Account</h2>
-    <p class="text-gray-700 mt-1">Get started with smart investments and secure profits.</p>
-    <img src="https://img.icons8.com/clouds/500/forex.png" class="mx-auto mt-4 w-44" alt="trading-ad"/>
-  </section>
-  <main class="max-w-md mx-auto mt-10 bg-white p-8 rounded shadow">
-    <h2 class="text-xl font-bold text-blue-800 text-center mb-4">Sign Up</h2>
-    <form onsubmit="signup(event)">
-      <input type="text" id="name" placeholder="Full Name" class="w-full p-3 border rounded mb-4" required>
-      <input type="email" id="email" placeholder="Email Address" class="w-full p-3 border rounded mb-4" required>
-      <input type="password" id="password" placeholder="Password" class="w-full p-3 border rounded mb-4" required>
-      <input type="text" id="country" placeholder="Country" class="w-full p-3 border rounded mb-4" required>
-      <button type="submit" class="w-full bg-blue-700 text-white py-3 rounded hover:bg-blue-800">Create Account</button>
+<body class="bg-gray-100">
+
+  <!-- 🌍 Language Selection -->
+  <div class="translate-container">
+    <div id="google_translate_element"></div>
+  </div>
+
+  <!-- 🧠 Header / Branding -->
+  <div class="text-center p-6 bg-white shadow">
+    <img src="https://cdn-icons-png.flaticon.com/512/1584/1584990.png" alt="TrustBroker Logo" class="w-16 mx-auto mb-2">
+    <h1 class="text-2xl font-bold text-blue-700">Create Your Trading & Investment Account</h1>
+    <p class="text-sm text-gray-600">Join the future of smart investing today</p>
+  </div>
+
+  <!-- 📸 Forex Trading Ad Banner -->
+  <div class="p-4">
+    <img src="https://www.investopedia.com/thmb/ZTljFvwh6rBJg-JUOZz8qlUWB7E=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1284855552-c84567b1f8704b3b9a6ae8cb0ae90f7e.jpg" alt="Forex Banner" class="rounded-lg shadow-lg w-full">
+  </div>
+
+  <!-- 📋 Sign Up Form -->
+  <div class="max-w-lg mx-auto mt-6 bg-white p-6 rounded shadow">
+    <form onsubmit="register(event)" class="space-y-4">
+      <input type="text" id="name" placeholder="Full Name" class="input" required>
+      <input type="email" id="email" placeholder="Email" class="input" required>
+      <input type="password" id="password" placeholder="Password" class="input" required>
+
+      <select id="country" class="input" required>
+        <option value="">Select Country</option>
+        <option>Afghanistan</option><option>Albania</option><option>Algeria</option><option>Andorra</option>
+        <option>Angola</option><option>Argentina</option><option>Armenia</option><option>Australia</option>
+        <option>Austria</option><option>Azerbaijan</option><option>Bangladesh</option><option>Belgium</option>
+        <option>Brazil</option><option>Cameroon</option><option>Canada</option><option>China</option>
+        <option>Denmark</option><option>Egypt</option><option>Finland</option><option>France</option>
+        <option>Germany</option><option>Ghana</option><option>India</option><option>Indonesia</option>
+        <option>Italy</option><option>Japan</option><option>Kenya</option><option>Mexico</option>
+        <option>Morocco</option><option>Nigeria</option><option>Pakistan</option><option>Russia</option>
+        <option>South Africa</option><option>Spain</option><option>Sweden</option><option>United Kingdom</option>
+        <option>United States</option><option>Zimbabwe</option>
+      </select>
+
+      <button type="submit" class="btn-blue">Create Account</button>
     </form>
-    <p class="text-sm mt-4 text-center text-gray-600">
+
+    <p class="text-center mt-4 text-sm text-gray-600">
       Already have an account?
-      <a href="signin.html" class="text-blue-600 underline">Sign in here</a>
+      <a href="signin.html" class="text-blue-600 font-semibold">Sign In</a>
     </p>
-  </main>
+  </div>
+
+  <!-- 🌐 Google Translate Script -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+    }
+  </script>
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <!-- 🧠 Save User Info -->
   <script>
-    function signup(event) {
-      event.preventDefault();
-      const name = document.getElementById("name").value;
-      const email = document.getElementById("email").value;
-      const pass = document.getElementById("password").value;
-      const country = document.getElementById("country").value;
-      const user = { name, email, pass, country };
+    function register(e) {
+      e.preventDefault();
+      const user = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value,
+        country: document.getElementById('country').value,
+        balance: 0
+      };
       localStorage.setItem("trust_user", JSON.stringify(user));
-      alert("Account created successfully!");
-      window.location.href = "signin.html";
+      window.location.href = "dashboard.html";
     }
   </script>
 </body>
-</html>
+  </html>
