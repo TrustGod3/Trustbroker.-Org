@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TrustBroker | Crypto Wallet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background-color: #0e1a2b; color: white; }
+    .card { background-color: #152642; border-radius: 1rem; padding: 1.5rem; margin-bottom: 1rem; }
+    .input, select { width: 100%; padding: 0.75rem; border-radius: 0.5rem; border: none; margin-bottom: 1rem; }
+    .btn { padding: 0.75rem; border-radius: 0.5rem; font-weight: bold; text-align: center; width: 100%; }
+    .btn-blue { background-color: #2563eb; color: white; }
+    .btn-red { background-color: #ef4444; color: white; }
+    .btn-green { background-color: #10b981; color: white; }
+  </style>
+</head>
+<body>
+
+  <div class="max-w-3xl mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-4 text-blue-400 text-center">TrustBroker Crypto Wallet</h1>
+
+    <!-- Coin Selector -->
+    <select id="coinSelect" onchange="updateWallet()" class="input">
+      <option value="BTC">Bitcoin (BTC)</option>
+      <option value="ETH">Ethereum (ETH)</option>
+      <option value="USDT">Tether (USDT)</option>
+      <option value="BNB">Binance Coin (BNB)</option>
+      <option value="SOL">Solana (SOL)</option>
+    </select>
+
+    <!-- Wallet Info -->
+    <div class="card">
+      <h2 class="text-xl font-semibold mb-2" id="coinTitle">Bitcoin Wallet</h2>
+      <p>Wallet Address:</p>
+      <div class="bg-gray-800 p-2 rounded text-sm break-all flex justify-between items-center">
+        <span id="walletAddress">1BTCwalletXYZ123</span>
+        <button onclick="copyAddress()" class="text-blue-300 text-sm underline">Copy</button>
+      </div>
+      <img id="qrImage" src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=1BTCwalletXYZ123" class="mt-2 w-32" alt="QR Code">
+      <p class="mt-4">Balance: <span id="walletBalance">0.00</span> <span id="walletSymbol">BTC</span></p>
+    </div>
+
+    <!-- Deposit & Withdraw -->
+    <div class="grid grid-cols-2 gap-4">
+      <div class="card">
+        <h3 class="font-semibold mb-2">Deposit</h3>
+        <input type="number" id="depositInput" placeholder="Enter amount" class="input" />
+        <button class="btn btn-green" onclick="depositCoin()">Deposit</button>
+      </div>
+      <div class="card">
+        <h3 class="font-semibold mb-2">Withdraw</h3>
+        <input type="number" id="withdrawInput" placeholder="Enter amount" class="input" />
+        <button class="btn btn-red" onclick="withdrawCoin()">Withdraw</button>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div class="card">
+      <h3 class="font-semibold mb-2">Transaction History</h3>
+      <ul id="txHistory" class="text-sm space-y-1 text-gray-300">
+        <li>No transactions yet.</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const walletData = JSON.parse(localStorage.getItem("crypto_wallet")) || {
+      BTC: { address: "1BTCwalletXYZ123", balance: 0, history: [] },
+      ETH: { address: "0xETHwalletABC456", balance: 0, history: [] },
+      USDT: { address: "TUSDTwallet123456", balance: 0, history: [] },
+      BNB: { address: "bnb1wallet000xyz", balance: 0, history: [] },
+      SOL: { address: "solanaWALLET777xyz", balance: 0, history: [] }
+    };
+
+    let selectedCoin = "BTC";
+
+    function updateWallet() {
+      selectedCoin = document.getElementById("coinSelect").value;
+      const data = walletData[selectedCoin];
+      document.getElementById("walletAddress").textContent = data.address;
+      document.getElementById("coinTitle").textContent = `${selectedCoin} Wallet`;
+      document.getElementById("walletSymbol").textContent = selectedCoin;
+      document.getElementById("walletBalance").textContent = data.balance.toFixed(4);
+      document.getElementById("qrImage").src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${data.address}`;
+      renderHistory();
+    }
+
+    function copyAddress() {
+      const addr = walletData[selectedCoin].address;
+      navigator.clipboard.writeText(addr).then(() => alert("Address copied!"));
+    }
+
+    function depositCoin() {
+      const amt = parseFloat(document.getElementById("depositInput").value);
+      if (!amt || amt <= 0) return alert("Invalid amount");
+      walletData[selectedCoin].balance += amt;
+      walletData[selectedCoin].history.unshift(`+${amt} ${selectedCoin} (Deposit) - ${new Date().toLocaleString()}`);
+      saveAndUpdate();
+    }
+
+    function withdrawCoin() {
+      const amt = parseFloat(document.getElementById("withdrawInput").value);
+      if (!amt || amt <= 0 || amt > walletData[selectedCoin].balance) return alert("Invalid or insufficient funds");
+      walletData[selectedCoin].balance -= amt;
+      walletData[selectedCoin].history.unshift(`-${amt} ${selectedCoin} (Withdraw) - ${new Date().toLocaleString()}`);
+      saveAndUpdate();
+    }
+
+    function saveAndUpdate() {
+      localStorage.setItem("crypto_wallet", JSON.stringify(walletData));
+      updateWallet();
+    }
+
+    function renderHistory() {
+      const history = walletData[selectedCoin].history;
+      const list = document.getElementById("txHistory");
+      list.innerHTML = history.length ? history.map(tx => `<li>${tx}</li>`).join('') : "<li>No transactions yet.</li>";
+    }
+
+    updateWallet();
+  </script>
+
+</body>
+</html>
